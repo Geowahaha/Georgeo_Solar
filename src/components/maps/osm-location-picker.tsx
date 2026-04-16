@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Map as LeafletMap, Marker as LeafletMarker } from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { MapPin } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -40,6 +42,8 @@ export function OsmLocationPicker({
     { label: string; lat: number; lng: number }[]
   >([]);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [geoLoading, setGeoLoading] = useState(false);
+  const [geoError, setGeoError] = useState<string | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const searchWrapRef = useRef<HTMLDivElement>(null);
 
@@ -179,11 +183,48 @@ export function OsmLocationPicker({
     setSearchResults([]);
   };
 
+  const useMyCurrentLocation = () => {
+    setGeoError(null);
+    if (!mapReady || typeof navigator === "undefined" || !navigator.geolocation) {
+      setGeoError("Location is not available in this browser.");
+      return;
+    }
+    setGeoLoading(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const la = pos.coords.latitude;
+        const ln = pos.coords.longitude;
+        setMarkerRef.current(la, ln);
+        onChange(la, ln);
+        mapRef.current?.setView([la, ln], 17);
+        void reverseGeocode(la, ln);
+        setGeoLoading(false);
+      },
+      (err) => {
+        setGeoLoading(false);
+        if (err.code === 1) {
+          setGeoError("Location permission denied — allow location for this site in your browser.");
+        } else if (err.code === 2) {
+          setGeoError("Your position could not be determined.");
+        } else if (err.code === 3) {
+          setGeoError("Location request timed out — try again.");
+        } else {
+          setGeoError("Could not read your location.");
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 60_000,
+      },
+    );
+  };
+
   return (
     <div className="space-y-3">
       <p className="text-sm text-[#a2a3a5]">
-        Free map (OpenStreetMap) — search, click to place a pin, or drag the pin. No API key
-        needed.
+        Free map (OpenStreetMap) — use your current location, search, click the map, or drag the
+        pin.
       </p>
       <div className="relative z-[1000]" ref={searchWrapRef}>
         <Label htmlFor="osm-search">Find address (Thailand)</Label>
@@ -214,6 +255,29 @@ export function OsmLocationPicker({
           </ul>
         ) : null}
       </div>
+      <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          disabled={!mapReady || geoLoading}
+          onClick={useMyCurrentLocation}
+          className="border-white/20 bg-black text-white hover:bg-white/10"
+        >
+          {geoLoading ? (
+            "Getting location…"
+          ) : (
+            <>
+              <MapPin className="h-4 w-4" aria-hidden />
+              Use my current location
+            </>
+          )}
+        </Button>
+        <span className="text-xs text-[#737373]">
+          Uses your device GPS (browser will ask permission).
+        </span>
+      </div>
+      {geoError ? <p className="text-sm text-amber-400/90">{geoError}</p> : null}
       <div
         ref={containerRef}
         className="z-0 h-[280px] w-full overflow-hidden rounded-lg border border-white/10 [&_.leaflet-container]:h-full [&_.leaflet-container]:w-full"

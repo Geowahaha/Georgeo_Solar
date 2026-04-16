@@ -1,4 +1,4 @@
-import { createServiceRoleClient } from "@/lib/supabase/service-role";
+import { getServiceRoleClient } from "@/lib/supabase/service-role";
 
 /**
  * Total lead rows (quote requests) for public marketing copy.
@@ -6,8 +6,9 @@ import { createServiceRoleClient } from "@/lib/supabase/service-role";
  */
 export async function getPublicLeadCount(): Promise<number> {
   try {
-    const supabase = createServiceRoleClient();
-    const { count, error } = await supabase
+    const sr = getServiceRoleClient();
+    if (!sr.ok) return 0;
+    const { count, error } = await sr.client
       .from("leads")
       .select("*", { count: "exact", head: true });
 

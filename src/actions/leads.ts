@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { leadFormSchema } from "@/lib/validations/lead";
 import { estimateProposal } from "@/lib/leads/proposal";
 import { computeLeadScore, scoreToTemperature } from "@/lib/leads/scoring";
-import { createServiceRoleClient } from "@/lib/supabase/service-role";
+import { getServiceRoleClient } from "@/lib/supabase/service-role";
 import { dispatchLeadCreatedWebhook } from "@/actions/webhook";
 import type { LeadTemperature, PipelineStatus } from "@/types/database";
 
@@ -34,10 +34,12 @@ export async function createLeadAction(
     return await createLeadActionInner(formData);
   } catch (err) {
     console.error("createLeadAction failed:", err);
+    const detail = err instanceof Error ? err.message : String(err);
+    console.error("createLeadAction detail:", detail);
     return {
       ok: false,
       message:
-        "Something went wrong while submitting. Check your connection and file sizes, then try again.",
+        "Something went wrong while saving your request. Please try again. If it continues, contact us — the server log will show the cause.",
     };
   }
 }
@@ -103,7 +105,18 @@ async function createLeadActionInner(formData: FormData): Promise<CreateLeadStat
   const temperature: LeadTemperature = scoreToTemperature(score);
   const proposal = estimateProposal(data.monthlyBillThb);
 
-  const supabase = createServiceRoleClient();
+  const sr = getServiceRoleClient();
+  if (!sr.ok) {
+    console.error(
+      "[leads] Missing Supabase env: set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY on the server (e.g. Vercel).",
+    );
+    return {
+      ok: false,
+      message:
+        "Server cannot save quotes yet — Supabase credentials are missing. Add NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in your deployment settings.",
+    };
+  }
+  const supabase = sr.client;
 
   const { data: leadRow, error: leadErr } = await supabase
     .from("leads")
@@ -129,14 +142,14 @@ async function createLeadActionInner(formData: FormData): Promise<CreateLeadStat
     .single();
 
   if (leadErr || !leadRow) {
-    console.error("leads insert error:", leadErr?.message ?? leadErr);
+    console.error("leads insert error:", leadErr?.message ?? leadErr, leadErr);
     return { ok: false, message: "Could not save your request. Please try again." };
   }
 
   const leadId = leadRow.id;
 
   const billPath = `${leadId}/${safeFileName(billFile.name)}`;
-  const billBuf = Buffer.from(await billFile.arrayBuffer());
+  const billBuf = new Uint8Array(await billFile.arrayBuffer());
   const { error: billUpErr } = await supabase.storage
     .from("bills")
     .upload(billPath, billBuf, {
@@ -156,7 +169,7 @@ async function createLeadActionInner(formData: FormData): Promise<CreateLeadStat
 
   for (const roof of roofFiles) {
     const path = `${leadId}/${safeFileName(roof.name)}`;
-    const buf = Buffer.from(await roof.arrayBuffer());
+    const buf = new Uint8Array(await roof.arrayBuffer());
     const { error: rErr } = await supabase.storage.from("roofs").upload(path, buf, {
       contentType: roof.type || "image/jpeg",
       upsert: false,

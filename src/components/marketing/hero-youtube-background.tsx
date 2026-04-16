@@ -84,8 +84,6 @@ export function HeroYoutubeBackground() {
           playsinline: 1,
           rel: 0,
           start: START_SECONDS,
-          loop: 1,
-          playlist: VIDEO_ID,
           enablejsapi: 1,
           origin:
             typeof window !== "undefined" ? window.location.origin : undefined,
@@ -97,6 +95,18 @@ export function HeroYoutubeBackground() {
               e.target.playVideo();
             } else {
               e.target.pauseVideo();
+            }
+          },
+          /**
+           * `loop` + `playlist` in playerVars is unreliable with `start`. Restart manually from
+           * START_SECONDS when the video ends so the hero always loops from 0:06.
+           */
+          onStateChange: (e) => {
+            // YT.PlayerState.ENDED === 0 (avoid UMD global in module scope)
+            if (e.data !== 0) return;
+            e.target.seekTo(START_SECONDS, true);
+            if (heroVisibleRef.current) {
+              e.target.playVideo();
             }
           },
         },
