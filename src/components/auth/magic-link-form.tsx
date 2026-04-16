@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { signInWithMagicLink, type AuthState } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
@@ -11,28 +12,37 @@ import { Loader2 } from "lucide-react";
 const fieldClass =
   "border-white/20 bg-black text-white placeholder:text-[#737373] focus-visible:border-white/40 focus-visible:ring-white/20";
 
-export function MagicLinkForm() {
+type Props = {
+  redirectAfterLogin: string;
+};
+
+export function MagicLinkForm({ redirectAfterLogin }: Props) {
+  const t = useTranslations("Login");
   const [state, action, pending] = useActionState(signInWithMagicLink, null as AuthState | null);
 
   useEffect(() => {
     if (state?.ok) {
-      toast.success("Check your email for the sign-in link.");
+      toast.success(t("toastSent"));
     } else if (state && !state.ok) {
       toast.error(state.message);
     }
-  }, [state]);
+  }, [state, t]);
 
   return (
-    <form action={action} className="space-y-4 [&_label]:text-[12px] [&_label]:font-medium [&_label]:tracking-[0.08em] [&_label]:text-[#a2a3a5] [&_label]:uppercase">
+    <form
+      action={action}
+      className="space-y-4 [&_label]:text-[12px] [&_label]:font-medium [&_label]:tracking-[0.08em] [&_label]:text-[#a2a3a5] [&_label]:uppercase"
+    >
+      <input type="hidden" name="next" value={redirectAfterLogin} />
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{t("emailLabel")}</Label>
         <Input
           id="email"
           name="email"
           type="email"
           autoComplete="email"
           required
-          placeholder="you@example.com"
+          placeholder={t("emailPlaceholder")}
           className={fieldClass}
         />
       </div>
@@ -44,10 +54,10 @@ export function MagicLinkForm() {
         {pending ? (
           <>
             <Loader2 className="animate-spin" />
-            Sending link…
+            {t("submitSending")}
           </>
         ) : (
-          "Email me a magic link"
+          t("submit")
         )}
       </Button>
     </form>

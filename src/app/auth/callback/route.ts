@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { sanitizeInternalPath } from "@/lib/sanitize-internal-path";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/portal";
+  const next = sanitizeInternalPath(searchParams.get("next") ?? undefined, "/portal");
 
   if (code) {
     const cookieStore = await cookies();

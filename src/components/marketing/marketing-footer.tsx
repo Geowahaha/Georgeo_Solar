@@ -1,24 +1,23 @@
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 
-const links = [
-  { href: "/quote", label: "Order" },
-  { href: "/projects", label: "Projects" },
-  { href: "/login", label: "Account" },
-];
+export async function MarketingFooter() {
+  const t = await getTranslations("Footer");
+  const th = await getTranslations("Header");
+  const links = [
+    { href: "/quote", label: th("order") },
+    { href: "/projects", label: th("projects") },
+    { href: "/login", label: th("account") },
+  ];
+  const year = new Date().getFullYear();
 
-export function MarketingFooter() {
   return (
     <footer className="border-t border-white/10 bg-black">
       <div className="mx-auto max-w-[1200px] px-6 py-16 sm:px-10">
         <div className="flex flex-col gap-10 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <p className="text-[15px] font-medium tracking-wide text-white">
-              GeorGeo Duck4 Solar
-            </p>
-            <p className="mt-2 max-w-sm text-[13px] leading-relaxed text-[#737373]">
-              No.1 premium solar roof — we stand by you with a professional team, premium quality,
-              and proactive service.
-            </p>
+            <p className="text-[15px] font-medium tracking-wide text-white">{th("brand")}</p>
+            <p className="mt-2 max-w-sm text-[13px] leading-relaxed text-[#737373]">{t("tagline")}</p>
           </div>
           <nav className="flex flex-wrap gap-x-10 gap-y-3">
             {links.map((l) => (
@@ -33,7 +32,7 @@ export function MarketingFooter() {
           </nav>
         </div>
         <p className="mt-14 text-center text-[11px] text-[#5c5c5c] sm:text-left">
-          © {new Date().getFullYear()} GeorGeo Duck4 Solar
+          {t("copyright", { year })}
         </p>
       </div>
     </footer>

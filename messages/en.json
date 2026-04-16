@@ -1,0 +1,120 @@
+{
+  "Metadata": {
+    "title": "GeorGeo Duck4 Solar | No.1 Premium Solar Roof",
+    "description": "GeorGeo Duck4 Solar — premium solar roof in Thailand. Professional team, quality work, proactive service. Request a quote and save on energy."
+  },
+  "Header": {
+    "brand": "GeorGeo Duck4 Solar",
+    "projects": "Projects",
+    "order": "Order",
+    "account": "Account",
+    "langTh": "ไทย",
+    "langEn": "English"
+  },
+  "Footer": {
+    "tagline": "No.1 premium solar roof — we stand by you with a professional team, premium quality, and proactive service.",
+    "copyright": "© {year} GeorGeo Duck4 Solar"
+  },
+  "Home": {
+    "heroTitle": "No.1 Premium Solar Roof",
+    "heroSubtitle": "We stand by you — a professional team with premium quality and proactive service.",
+    "trustWithCount": "Trusted by {count}+ customers — quotes saved securely in our system",
+    "trustEmpty": "Request a quote — your details are saved securely when you submit.",
+    "ctaOrder": "Order now",
+    "ctaLearn": "Learn more",
+    "sectionPoweredTitle": "Powered and protected",
+    "sectionPoweredBody": "Your roof can do more than keep the rain out — it can power your home with clean energy while looking refined. We combine engineering and design so you get performance you can feel, year after year.",
+    "durabilityTitle": "Durability",
+    "durabilityBody": "Built to handle tropical sun and storms — ask us about materials, warranty, and how we tailor the system to your roof.",
+    "efficiencyTitle": "Efficiency",
+    "efficiencyBody": "We size the system to your usage so savings are meaningful, not guesswork — monitoring and support options available.",
+    "systemTitle": "Designed as a system",
+    "systemBody": "Panels, inverter, and installation work together — one team, one plan, from survey to handover.",
+    "bottomCtaTitle": "Ready to order?",
+    "bottomCtaBody": "Tell us about your home or factory — we’ll follow up with a clear next step."
+  },
+  "Quote": {
+    "title": "Order",
+    "description": "GeorGeo Duck4 Solar — upload your bill and roof photos for a fast, accurate assessment."
+  },
+  "QuoteForm": {
+    "errors": {
+      "email": "Please enter a valid email",
+      "name": "Please enter your name",
+      "phone": "Please enter a valid phone number",
+      "facebookUrl": "Facebook link must start with http:// or https://",
+      "address": "Please enter the property address",
+      "bill": "Bill amount must be greater than zero",
+      "budget": "Please select a budget range",
+      "location": "Pin your location on the map (search, tap the map, or use current location)."
+    },
+    "email": "Email",
+    "fullName": "Full name",
+    "phone": "Phone",
+    "lineId": "LINE ID",
+    "facebook": "Facebook profile URL",
+    "address": "Property address",
+    "mapLabel": "Map location",
+    "monthlyBill": "Monthly electric bill (THB)",
+    "budget": "Budget range",
+    "roofType": "Roof type",
+    "propertyType": "Property type",
+    "billFile": "Electric bill image",
+    "roofPhotos": "Roof photos (multiple)",
+    "notes": "Notes",
+    "submit": "Submit order",
+    "submitting": "Submitting…",
+    "budgetUnder100k": "Under ฿100,000",
+    "budget100k300k": "฿100,000 – ฿300,000",
+    "budget300k500k": "฿300,000 – ฿500,000",
+    "budget500k": "฿500,000+ (high budget)",
+    "roofTile": "Tile",
+    "roofMetal": "Metal",
+    "roofConcrete": "Concrete",
+    "propHome": "Home",
+    "propFactory": "Factory",
+    "selectBudget": "Select budget",
+    "toastSuccess": "Request received. Our team will contact you shortly.",
+    "billPreviewAlt": "Bill preview"
+  },
+  "Map": {
+    "intro": "Free map (OpenStreetMap) — use your current location, search, tap the map, or drag the pin.",
+    "searchLabel": "Find address (Thailand)",
+    "searchPlaceholder": "Street, district, or place…",
+    "useLocation": "Use my current location",
+    "gettingLocation": "Getting location…",
+    "locationHint": "Uses your device GPS (the browser will ask permission).",
+    "geoUnsupported": "Location is not available in this browser.",
+    "geoDenied": "Location permission denied — allow location for this site in your browser.",
+    "geoUnavailable": "Your position could not be determined.",
+    "geoTimeout": "Location request timed out — try again.",
+    "geoFailed": "Could not read your location.",
+    "lat": "Latitude",
+    "lng": "Longitude",
+    "placeholderCoords": "Search or tap the map",
+    "loading": "Loading map…"
+  },
+  "Login": {
+    "title": "Account",
+    "description": "We'll email you a magic link. Use the same email you used on your order.",
+    "backHome": "Back to home",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "submitSending": "Sending link…",
+    "submit": "Email me a magic link",
+    "toastSent": "Check your email for the sign-in link.",
+    "errors": {
+      "invalidEmail": "Enter a valid email address.",
+      "sendFailed": "Could not send magic link. Try again."
+    }
+  },
+  "Projects": {
+    "metaTitle": "Projects",
+    "metaDescription": "GeorGeo Duck4 Solar — installation gallery. Images from your configured project image feed.",
+    "heading": "Gallery",
+    "body": "Photo gallery — feed image URLs from Vercel environment variables.",
+    "facebookPrefix": "Facebook:",
+    "demoHint": "Showing demo images. In Vercel → Environment Variables, add NEXT_PUBLIC_PROJECT_GALLERY_JSON or NEXT_PUBLIC_PROJECT_IMAGE_URLS.",
+    "homeLink": "Home"
+  }
+}

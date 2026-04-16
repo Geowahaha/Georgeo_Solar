@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Suspense } from "react";
 import { getDashboardStats, getLeadsForTable } from "@/actions/dashboard";
 import { LeadsFilters } from "@/components/dashboard/leads-filters";

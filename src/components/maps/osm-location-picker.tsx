@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Map as LeafletMap, Marker as LeafletMarker } from "leaflet";
+import { useTranslations } from "next-intl";
 import "leaflet/dist/leaflet.css";
 import { MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,7 @@ export function OsmLocationPicker({
   onPlaceResolved,
   inputClassName,
 }: OsmLocationPickerProps) {
+  const t = useTranslations("Map");
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<LeafletMap | null>(null);
   const markerRef = useRef<LeafletMarker | null>(null);
@@ -186,7 +188,7 @@ export function OsmLocationPicker({
   const useMyCurrentLocation = () => {
     setGeoError(null);
     if (!mapReady || typeof navigator === "undefined" || !navigator.geolocation) {
-      setGeoError("Location is not available in this browser.");
+      setGeoError(t("geoUnsupported"));
       return;
     }
     setGeoLoading(true);
@@ -203,13 +205,13 @@ export function OsmLocationPicker({
       (err) => {
         setGeoLoading(false);
         if (err.code === 1) {
-          setGeoError("Location permission denied — allow location for this site in your browser.");
+          setGeoError(t("geoDenied"));
         } else if (err.code === 2) {
-          setGeoError("Your position could not be determined.");
+          setGeoError(t("geoUnavailable"));
         } else if (err.code === 3) {
-          setGeoError("Location request timed out — try again.");
+          setGeoError(t("geoTimeout"));
         } else {
-          setGeoError("Could not read your location.");
+          setGeoError(t("geoFailed"));
         }
       },
       {
@@ -222,12 +224,9 @@ export function OsmLocationPicker({
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-[#a2a3a5]">
-        Free map (OpenStreetMap) — use your current location, search, click the map, or drag the
-        pin.
-      </p>
+      <p className="text-sm text-[#a2a3a5]">{t("intro")}</p>
       <div className="relative z-[1000]" ref={searchWrapRef}>
-        <Label htmlFor="osm-search">Find address (Thailand)</Label>
+        <Label htmlFor="osm-search">{t("searchLabel")}</Label>
         <Input
           id="osm-search"
           type="search"
@@ -235,7 +234,7 @@ export function OsmLocationPicker({
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={() => searchResults.length > 0 && setSearchOpen(true)}
-          placeholder="Street, district, or place…"
+          placeholder={t("searchPlaceholder")}
           className={inputClassName}
         />
         {searchOpen && searchResults.length > 0 ? (
@@ -265,17 +264,15 @@ export function OsmLocationPicker({
           className="border-white/20 bg-black text-white hover:bg-white/10"
         >
           {geoLoading ? (
-            "Getting location…"
+            t("gettingLocation")
           ) : (
             <>
               <MapPin className="h-4 w-4" aria-hidden />
-              Use my current location
+              {t("useLocation")}
             </>
           )}
         </Button>
-        <span className="text-xs text-[#737373]">
-          Uses your device GPS (browser will ask permission).
-        </span>
+        <span className="text-xs text-[#737373]">{t("locationHint")}</span>
       </div>
       {geoError ? <p className="text-sm text-amber-400/90">{geoError}</p> : null}
       <div
@@ -284,22 +281,22 @@ export function OsmLocationPicker({
       />
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="osm-lat">Latitude</Label>
+          <Label htmlFor="osm-lat">{t("lat")}</Label>
           <Input
             id="osm-lat"
             value={lat != null ? String(lat) : ""}
             readOnly
-            placeholder="Search or click map"
+            placeholder={t("placeholderCoords")}
             className={inputClassName}
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="osm-lng">Longitude</Label>
+          <Label htmlFor="osm-lng">{t("lng")}</Label>
           <Input
             id="osm-lng"
             value={lng != null ? String(lng) : ""}
             readOnly
-            placeholder="Search or click map"
+            placeholder={t("placeholderCoords")}
             className={inputClassName}
           />
         </div>

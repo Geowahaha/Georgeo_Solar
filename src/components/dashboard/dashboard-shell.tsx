@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { LayoutDashboard, Map, Sun } from "lucide-react";
 
 const links = [

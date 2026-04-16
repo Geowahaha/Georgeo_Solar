@@ -1,19 +1,30 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { MarketingFooter } from "@/components/marketing/marketing-footer";
 import { MarketingHeader } from "@/components/marketing/marketing-header";
 import { ProjectImageGrid } from "@/components/projects/project-image-grid";
+import { Link } from "@/i18n/navigation";
 import { getStaticProjectGallery } from "@/lib/project-gallery";
-
-export const metadata: Metadata = {
-  title: "Projects",
-  description:
-    "GeorGeo Duck4 Solar — installation gallery. Images from your configured project image feed.",
-};
 
 const FB_PAGE = "https://www.facebook.com/profile.php?id=100064946531847";
 
-export default function ProjectsPage() {
+type Props = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations({ locale, namespace: "Projects" });
+  return {
+    title: t("metaTitle"),
+    description: t("metaDescription"),
+  };
+}
+
+export default async function ProjectsPage({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations({ locale, namespace: "Projects" });
+
   const items = getStaticProjectGallery();
   const hasCustomEnv =
     Boolean(process.env.NEXT_PUBLIC_PROJECT_GALLERY_JSON?.trim()) ||
@@ -25,13 +36,11 @@ export default function ProjectsPage() {
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 pt-24 pb-16 sm:pt-28">
         <div className="mb-10 space-y-2">
           <h1 className="text-[32px] font-medium tracking-tight text-white sm:text-[40px]">
-            Gallery
+            {t("heading")}
           </h1>
-          <p className="max-w-2xl text-[15px] leading-relaxed text-[#a2a3a5]">
-            Photo gallery — feed image URLs from Vercel environment variables.
-          </p>
+          <p className="max-w-2xl text-[15px] leading-relaxed text-[#a2a3a5]">{t("body")}</p>
           <p className="text-[13px] text-[#737373]">
-            Facebook:{" "}
+            {t("facebookPrefix")}{" "}
             <a
               href={FB_PAGE}
               className="text-white underline-offset-4 hover:underline"
@@ -45,12 +54,9 @@ export default function ProjectsPage() {
 
         {!hasCustomEnv ? (
           <p className="mb-6 border border-white/10 bg-white/[0.03] p-4 text-[13px] leading-relaxed text-[#a2a3a5]">
-            Showing <span className="text-white">demo</span> images. In Vercel → Environment
-            Variables, add{" "}
-            <code className="text-[12px] text-white/70">NEXT_PUBLIC_PROJECT_GALLERY_JSON</code> or{" "}
-            <code className="text-[12px] text-white/70">NEXT_PUBLIC_PROJECT_IMAGE_URLS</code>.{" "}
+            {t("demoHint")}{" "}
             <Link href="/" className="text-white underline-offset-4 hover:underline">
-              Home
+              {t("homeLink")}
             </Link>
           </p>
         ) : null}

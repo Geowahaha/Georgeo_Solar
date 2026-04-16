@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { redirect } from "next/navigation";
+import { getLocale } from "next-intl/server";
+import { Link, redirect } from "@/i18n/navigation";
 import { LogOut } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button";
 
 async function signOutAction() {
   "use server";
+  const locale = await getLocale();
   const supabase = await createClient();
   await supabase.auth.signOut();
-  redirect("/login");
+  redirect({ href: "/login", locale });
 }
 
 export default async function DashboardLayout({

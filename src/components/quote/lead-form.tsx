@@ -1,10 +1,11 @@
 "use client";
 
-import { useActionState, useCallback, useEffect, useRef, useState } from "react";
+import { useActionState, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { leadFormSchema, type LeadFormValues } from "@/lib/validations/lead";
+import { createLeadFormSchema, type LeadFormValues } from "@/lib/validations/lead";
 import { createLeadAction, type CreateLeadState } from "@/actions/leads";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,17 +22,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { LocationPicker } from "@/components/maps/location-picker";
 import { Loader2, Upload } from "lucide-react";
 
-const budgetOptions = [
-  { value: "under_100k", label: "Under ฿100,000" },
-  { value: "100k_300k", label: "฿100,000 – ฿300,000" },
-  { value: "300k_500k", label: "฿300,000 – ฿500,000" },
-  { value: "500k_high", label: "฿500,000+ (high budget)" },
-];
-
 const fieldClass =
   "border-white/20 bg-black text-white placeholder:text-[#737373] focus-visible:border-white/40 focus-visible:ring-white/20";
 
 export function LeadQuoteForm() {
+  const t = useTranslations("QuoteForm");
+  const tQuote = useTranslations("Quote");
   const billRef = useRef<HTMLInputElement>(null);
   const roofRef = useRef<HTMLInputElement>(null);
   const [state, formAction, isPending] = useActionState(
@@ -39,8 +35,23 @@ export function LeadQuoteForm() {
     null as CreateLeadState | null,
   );
 
+  const leadFormSchemaClient = useMemo(
+    () =>
+      createLeadFormSchema({
+        email: t("errors.email"),
+        name: t("errors.name"),
+        phone: t("errors.phone"),
+        facebookUrl: t("errors.facebookUrl"),
+        address: t("errors.address"),
+        bill: t("errors.bill"),
+        budget: t("errors.budget"),
+        location: t("errors.location"),
+      }),
+    [t],
+  );
+
   const form = useForm<LeadFormValues>({
-    resolver: zodResolver(leadFormSchema),
+    resolver: zodResolver(leadFormSchemaClient),
     defaultValues: {
       contactEmail: "",
       fullName: "",
@@ -58,16 +69,26 @@ export function LeadQuoteForm() {
     },
   });
 
+  const budgetOptions = useMemo(
+    () => [
+      { value: "under_100k", label: t("budgetUnder100k") },
+      { value: "100k_300k", label: t("budget100k300k") },
+      { value: "300k_500k", label: t("budget300k500k") },
+      { value: "500k_high", label: t("budget500k") },
+    ],
+    [t],
+  );
+
   useEffect(() => {
     if (state?.ok) {
-      toast.success("Request received. Our team will contact you shortly.");
+      toast.success(t("toastSuccess"));
       form.reset();
       if (billRef.current) billRef.current.value = "";
       if (roofRef.current) roofRef.current.value = "";
     } else if (state && !state.ok) {
       toast.error(state.message);
     }
-  }, [state, form]);
+  }, [state, form, t]);
 
   const onPlaceResolved = useCallback(
     (formattedAddress: string) => {
@@ -101,9 +122,9 @@ export function LeadQuoteForm() {
   return (
     <Card className="border border-white/10 bg-transparent">
       <CardHeader>
-        <CardTitle className="text-[28px] font-medium tracking-tight text-white">Order</CardTitle>
+        <CardTitle className="text-[28px] font-medium tracking-tight text-white">{tQuote("title")}</CardTitle>
         <CardDescription className="text-[15px] leading-relaxed text-[#a2a3a5]">
-          GeorGeo Duck4 Solar — upload your bill & roof photos for a fast, accurate assessment.
+          {tQuote("description")}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -113,7 +134,9 @@ export function LeadQuoteForm() {
         >
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2 sm:col-span-2">
-              <Label htmlFor="contactEmail">Email *</Label>
+              <Label htmlFor="contactEmail">
+                {t("email")} *
+              </Label>
               <Input
                 id="contactEmail"
                 autoComplete="email"
@@ -127,7 +150,9 @@ export function LeadQuoteForm() {
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="fullName">Full name *</Label>
+              <Label htmlFor="fullName">
+                {t("fullName")} *
+              </Label>
               <Input id="fullName" className={fieldClass} {...form.register("fullName")} />
               {form.formState.errors.fullName && (
                 <p className="text-sm text-red-400">
@@ -136,18 +161,20 @@ export function LeadQuoteForm() {
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone *</Label>
+              <Label htmlFor="phone">
+                {t("phone")} *
+              </Label>
               <Input id="phone" type="tel" className={fieldClass} {...form.register("phone")} />
               {form.formState.errors.phone && (
                 <p className="text-sm text-red-400">{form.formState.errors.phone.message}</p>
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="lineId">LINE ID</Label>
+              <Label htmlFor="lineId">{t("lineId")}</Label>
               <Input id="lineId" className={fieldClass} {...form.register("lineId")} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="facebookProfile">Facebook profile URL</Label>
+              <Label htmlFor="facebookProfile">{t("facebook")}</Label>
               <Input
                 id="facebookProfile"
                 className={fieldClass}
@@ -160,7 +187,9 @@ export function LeadQuoteForm() {
               )}
             </div>
             <div className="space-y-2 sm:col-span-2">
-              <Label htmlFor="address">Property address *</Label>
+              <Label htmlFor="address">
+                {t("address")} *
+              </Label>
               <Input id="address" className={fieldClass} {...form.register("address")} />
               {form.formState.errors.address && (
                 <p className="text-sm text-red-400">{form.formState.errors.address.message}</p>
@@ -169,7 +198,9 @@ export function LeadQuoteForm() {
           </div>
 
           <div className="space-y-2">
-            <Label>Map location *</Label>
+            <Label>
+              {t("mapLabel")} *
+            </Label>
             <LocationPicker
               lat={form.watch("lat") ?? null}
               lng={form.watch("lng") ?? null}
@@ -187,7 +218,9 @@ export function LeadQuoteForm() {
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="monthlyBillThb">Monthly electric bill (THB) *</Label>
+              <Label htmlFor="monthlyBillThb">
+                {t("monthlyBill")} *
+              </Label>
               <Input
                 id="monthlyBillThb"
                 type="number"
@@ -203,14 +236,16 @@ export function LeadQuoteForm() {
               )}
             </div>
             <div className="space-y-2">
-              <Label>Budget range *</Label>
+              <Label>
+                {t("budget")} *
+              </Label>
               <Controller
                 control={form.control}
                 name="budgetRange"
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
                     <SelectTrigger className={fieldClass}>
-                      <SelectValue placeholder="Select budget" />
+                      <SelectValue placeholder={t("selectBudget")} />
                     </SelectTrigger>
                     <SelectContent className="border border-white/10 bg-[#1a1a1a] text-white">
                       {budgetOptions.map((o) => (
@@ -224,7 +259,9 @@ export function LeadQuoteForm() {
               />
             </div>
             <div className="space-y-2">
-              <Label>Roof type *</Label>
+              <Label>
+                {t("roofType")} *
+              </Label>
               <Controller
                 control={form.control}
                 name="roofType"
@@ -234,16 +271,18 @@ export function LeadQuoteForm() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="border border-white/10 bg-[#1a1a1a] text-white">
-                      <SelectItem value="tile">Tile</SelectItem>
-                      <SelectItem value="metal">Metal</SelectItem>
-                      <SelectItem value="concrete">Concrete</SelectItem>
+                      <SelectItem value="tile">{t("roofTile")}</SelectItem>
+                      <SelectItem value="metal">{t("roofMetal")}</SelectItem>
+                      <SelectItem value="concrete">{t("roofConcrete")}</SelectItem>
                     </SelectContent>
                   </Select>
                 )}
               />
             </div>
             <div className="space-y-2">
-              <Label>Property type *</Label>
+              <Label>
+                {t("propertyType")} *
+              </Label>
               <Controller
                 control={form.control}
                 name="propertyType"
@@ -253,8 +292,8 @@ export function LeadQuoteForm() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="border border-white/10 bg-[#1a1a1a] text-white">
-                      <SelectItem value="home">Home</SelectItem>
-                      <SelectItem value="factory">Factory</SelectItem>
+                      <SelectItem value="home">{t("propHome")}</SelectItem>
+                      <SelectItem value="factory">{t("propFactory")}</SelectItem>
                     </SelectContent>
                   </Select>
                 )}
@@ -264,7 +303,9 @@ export function LeadQuoteForm() {
 
           <div className="grid gap-6 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="billImage">Electric bill image *</Label>
+              <Label htmlFor="billImage">
+                {t("billFile")} *
+              </Label>
               <div className="flex items-center gap-2">
                 <Input
                   id="billImage"
@@ -275,10 +316,12 @@ export function LeadQuoteForm() {
                 />
                 <Upload className="h-4 w-4 shrink-0 text-[#737373]" aria-hidden />
               </div>
-              <BillPreview inputRef={billRef} />
+              <BillPreview inputRef={billRef} alt={t("billPreviewAlt")} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="roofImages">Roof photos * (multiple)</Label>
+              <Label htmlFor="roofImages">
+                {t("roofPhotos")} *
+              </Label>
               <Input
                 id="roofImages"
                 ref={roofRef}
@@ -292,7 +335,7 @@ export function LeadQuoteForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="notes">Notes</Label>
+            <Label htmlFor="notes">{t("notes")}</Label>
             <Textarea id="notes" rows={4} className={fieldClass} {...form.register("notes")} />
           </div>
 
@@ -304,10 +347,10 @@ export function LeadQuoteForm() {
             {isPending ? (
               <>
                 <Loader2 className="animate-spin" />
-                Submitting…
+                {t("submitting")}
               </>
             ) : (
-              "Submit order"
+              t("submit")
             )}
           </Button>
         </form>
@@ -316,7 +359,13 @@ export function LeadQuoteForm() {
   );
 }
 
-function BillPreview({ inputRef }: { inputRef: React.RefObject<HTMLInputElement | null> }) {
+function BillPreview({
+  inputRef,
+  alt,
+}: {
+  inputRef: React.RefObject<HTMLInputElement | null>;
+  alt: string;
+}) {
   const [url, setUrl] = useState<string | null>(null);
   useEffect(() => {
     const el = inputRef.current;
@@ -343,7 +392,7 @@ function BillPreview({ inputRef }: { inputRef: React.RefObject<HTMLInputElement 
   if (!url) return null;
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={url} alt="Bill preview" className="mt-2 max-h-40 rounded-md border border-white/10" />
+    <img src={url} alt={alt} className="mt-2 max-h-40 rounded-md border border-white/10" />
   );
 }
 

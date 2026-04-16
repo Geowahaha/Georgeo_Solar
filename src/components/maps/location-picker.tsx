@@ -1,12 +1,18 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
+
+function MapLoading() {
+  const t = useTranslations("Map");
+  return <p className="text-sm text-[#a2a3a5]">{t("loading")}</p>;
+}
 
 const OsmLocationPicker = dynamic(
   () => import("./osm-location-picker").then((m) => m.OsmLocationPicker),
   {
     ssr: false,
-    loading: () => <p className="text-sm text-[#a2a3a5]">Loading map…</p>,
+    loading: MapLoading,
   },
 );
 
