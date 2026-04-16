@@ -11,7 +11,10 @@ export function PublicHeader() {
           <span>Georgeo_Solar</span>
           <span className="hidden text-slate-500 sm:inline">· Duck4 Solar</span>
         </Link>
-        <nav className="flex items-center gap-2">
+        <nav className="flex flex-wrap items-center gap-2">
+          <Button variant="ghost" asChild>
+            <Link href="/projects">Projects</Link>
+          </Button>
           <Button variant="ghost" asChild>
             <Link href="/quote">Get quote</Link>
           </Button>

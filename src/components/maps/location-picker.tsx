@@ -11,9 +11,11 @@ type LocationPickerProps = {
   lat: number | null;
   lng: number | null;
   onChange: (lat: number | null, lng: number | null) => void;
+  /** Tesla / marketing dark form — pass same class as other inputs on /quote */
+  inputClassName?: string;
 };
 
-function LocationPickerManual({ lat, lng, onChange }: LocationPickerProps) {
+function LocationPickerManual({ lat, lng, onChange, inputClassName }: LocationPickerProps) {
   const [manualLat, setManualLat] = useState(lat != null ? String(lat) : "");
   const [manualLng, setManualLng] = useState(lng != null ? String(lng) : "");
 
@@ -29,9 +31,9 @@ function LocationPickerManual({ lat, lng, onChange }: LocationPickerProps) {
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-slate-400">
+      <p className="text-sm text-[#a2a3a5]">
         Add{" "}
-        <code className="rounded bg-slate-800 px-1 py-0.5 text-xs">
+        <code className="rounded bg-white/10 px-1 py-0.5 text-xs text-white/90">
           NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
         </code>{" "}
         for the interactive map, or enter coordinates manually.
@@ -46,6 +48,7 @@ function LocationPickerManual({ lat, lng, onChange }: LocationPickerProps) {
             onBlur={applyManual}
             inputMode="decimal"
             placeholder="13.7563"
+            className={inputClassName}
           />
         </div>
         <div className="space-y-2">
@@ -64,7 +67,7 @@ function LocationPickerManual({ lat, lng, onChange }: LocationPickerProps) {
   );
 }
 
-function LocationPickerGoogle({ lat, lng, onChange }: LocationPickerProps) {
+function LocationPickerGoogle({ lat, lng, onChange, inputClassName }: LocationPickerProps) {
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
 
   const { isLoaded } = useJsApiLoader({
@@ -89,15 +92,15 @@ function LocationPickerGoogle({ lat, lng, onChange }: LocationPickerProps) {
   );
 
   if (!isLoaded) {
-    return <p className="text-sm text-slate-400">Loading map…</p>;
+    return <p className="text-sm text-[#a2a3a5]">Loading map…</p>;
   }
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-slate-400">
+      <p className="text-sm text-[#a2a3a5]">
         Click the map to drop your roof location (helps us plan site access).
       </p>
-      <div className="overflow-hidden rounded-lg border border-slate-800">
+      <div className="overflow-hidden rounded-lg border border-white/10">
         <GoogleMap
           mapContainerStyle={{ width: "100%", height: "280px" }}
           center={center}
@@ -120,6 +123,7 @@ function LocationPickerGoogle({ lat, lng, onChange }: LocationPickerProps) {
             value={lat != null ? String(lat) : ""}
             readOnly
             placeholder="Click map"
+            className={inputClassName}
           />
         </div>
         <div className="space-y-2">
@@ -129,6 +133,7 @@ function LocationPickerGoogle({ lat, lng, onChange }: LocationPickerProps) {
             value={lng != null ? String(lng) : ""}
             readOnly
             placeholder="Click map"
+            className={inputClassName}
           />
         </div>
       </div>

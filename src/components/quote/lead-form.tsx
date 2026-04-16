@@ -28,6 +28,9 @@ const budgetOptions = [
   { value: "500k_high", label: "฿500,000+ (high budget)" },
 ];
 
+const fieldClass =
+  "border-white/20 bg-black text-white placeholder:text-[#737373] focus-visible:border-white/40 focus-visible:ring-white/20";
+
 export function LeadQuoteForm() {
   const billRef = useRef<HTMLInputElement>(null);
   const roofRef = useRef<HTMLInputElement>(null);
@@ -89,21 +92,25 @@ export function LeadQuoteForm() {
   });
 
   return (
-    <Card className="border-slate-800 bg-slate-950/40">
+    <Card className="border border-white/10 bg-transparent">
       <CardHeader>
-        <CardTitle className="text-xl text-slate-50">Get Solar Quote</CardTitle>
-        <CardDescription>
+        <CardTitle className="text-[28px] font-medium tracking-tight text-white">Order</CardTitle>
+        <CardDescription className="text-[15px] leading-relaxed text-[#a2a3a5]">
           Duck4 Solar — upload your bill & roof photos for a fast, accurate assessment.
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={onSubmit} className="space-y-8">
+        <form
+          onSubmit={onSubmit}
+          className="space-y-8 [&_label]:text-[12px] [&_label]:font-medium [&_label]:tracking-[0.08em] [&_label]:text-[#a2a3a5] [&_label]:uppercase"
+        >
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2 sm:col-span-2">
               <Label htmlFor="contactEmail">Email *</Label>
               <Input
                 id="contactEmail"
                 autoComplete="email"
+                className={fieldClass}
                 {...form.register("contactEmail")}
               />
               {form.formState.errors.contactEmail && (
@@ -114,7 +121,7 @@ export function LeadQuoteForm() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="fullName">Full name *</Label>
-              <Input id="fullName" {...form.register("fullName")} />
+              <Input id="fullName" className={fieldClass} {...form.register("fullName")} />
               {form.formState.errors.fullName && (
                 <p className="text-sm text-red-400">
                   {form.formState.errors.fullName.message}
@@ -123,18 +130,22 @@ export function LeadQuoteForm() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="phone">Phone *</Label>
-              <Input id="phone" type="tel" {...form.register("phone")} />
+              <Input id="phone" type="tel" className={fieldClass} {...form.register("phone")} />
               {form.formState.errors.phone && (
                 <p className="text-sm text-red-400">{form.formState.errors.phone.message}</p>
               )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="lineId">LINE ID</Label>
-              <Input id="lineId" {...form.register("lineId")} />
+              <Input id="lineId" className={fieldClass} {...form.register("lineId")} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="facebookProfile">Facebook profile URL</Label>
-              <Input id="facebookProfile" {...form.register("facebookProfile")} />
+              <Input
+                id="facebookProfile"
+                className={fieldClass}
+                {...form.register("facebookProfile")}
+              />
               {form.formState.errors.facebookProfile && (
                 <p className="text-sm text-red-400">
                   {form.formState.errors.facebookProfile.message}
@@ -143,7 +154,7 @@ export function LeadQuoteForm() {
             </div>
             <div className="space-y-2 sm:col-span-2">
               <Label htmlFor="address">Property address *</Label>
-              <Input id="address" {...form.register("address")} />
+              <Input id="address" className={fieldClass} {...form.register("address")} />
               {form.formState.errors.address && (
                 <p className="text-sm text-red-400">{form.formState.errors.address.message}</p>
               )}
@@ -155,6 +166,7 @@ export function LeadQuoteForm() {
             <LocationPicker
               lat={form.watch("lat") ?? null}
               lng={form.watch("lng") ?? null}
+              inputClassName={fieldClass}
               onChange={(la, ln) => {
                 form.setValue("lat", la, { shouldValidate: true });
                 form.setValue("lng", ln, { shouldValidate: true });
@@ -170,6 +182,7 @@ export function LeadQuoteForm() {
                 type="number"
                 min={1}
                 step="0.01"
+                className={fieldClass}
                 {...form.register("monthlyBillThb", { valueAsNumber: true })}
               />
               {form.formState.errors.monthlyBillThb && (
@@ -185,10 +198,10 @@ export function LeadQuoteForm() {
                 name="budgetRange"
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger>
+                    <SelectTrigger className={fieldClass}>
                       <SelectValue placeholder="Select budget" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="border border-white/10 bg-[#1a1a1a] text-white">
                       {budgetOptions.map((o) => (
                         <SelectItem key={o.value} value={o.value}>
                           {o.label}
@@ -206,10 +219,10 @@ export function LeadQuoteForm() {
                 name="roofType"
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger>
+                    <SelectTrigger className={fieldClass}>
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="border border-white/10 bg-[#1a1a1a] text-white">
                       <SelectItem value="tile">Tile</SelectItem>
                       <SelectItem value="metal">Metal</SelectItem>
                       <SelectItem value="concrete">Concrete</SelectItem>
@@ -225,10 +238,10 @@ export function LeadQuoteForm() {
                 name="propertyType"
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger>
+                    <SelectTrigger className={fieldClass}>
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="border border-white/10 bg-[#1a1a1a] text-white">
                       <SelectItem value="home">Home</SelectItem>
                       <SelectItem value="factory">Factory</SelectItem>
                     </SelectContent>
@@ -247,9 +260,9 @@ export function LeadQuoteForm() {
                   ref={billRef}
                   type="file"
                   accept="image/*,application/pdf"
-                  className="cursor-pointer"
+                  className={`cursor-pointer ${fieldClass}`}
                 />
-                <Upload className="h-4 w-4 shrink-0 text-slate-500" aria-hidden />
+                <Upload className="h-4 w-4 shrink-0 text-[#737373]" aria-hidden />
               </div>
               <BillPreview inputRef={billRef} />
             </div>
@@ -261,7 +274,7 @@ export function LeadQuoteForm() {
                 type="file"
                 accept="image/*"
                 multiple
-                className="cursor-pointer"
+                className={`cursor-pointer ${fieldClass}`}
               />
               <RoofPreview inputRef={roofRef} />
             </div>
@@ -269,17 +282,21 @@ export function LeadQuoteForm() {
 
           <div className="space-y-2">
             <Label htmlFor="notes">Notes</Label>
-            <Textarea id="notes" rows={4} {...form.register("notes")} />
+            <Textarea id="notes" rows={4} className={fieldClass} {...form.register("notes")} />
           </div>
 
-          <Button type="submit" disabled={isPending} className="w-full sm:w-auto">
+          <Button
+            type="submit"
+            disabled={isPending}
+            className="h-11 min-w-[200px] rounded-none bg-white px-8 text-sm font-medium tracking-wide text-black hover:bg-white/90 sm:w-auto"
+          >
             {isPending ? (
               <>
                 <Loader2 className="animate-spin" />
                 Submitting…
               </>
             ) : (
-              "Submit & get proposal"
+              "Submit order"
             )}
           </Button>
         </form>
@@ -315,7 +332,7 @@ function BillPreview({ inputRef }: { inputRef: React.RefObject<HTMLInputElement 
   if (!url) return null;
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={url} alt="Bill preview" className="mt-2 max-h-40 rounded-md border border-slate-800" />
+    <img src={url} alt="Bill preview" className="mt-2 max-h-40 rounded-md border border-white/10" />
   );
 }
 

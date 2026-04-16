@@ -45,7 +45,16 @@ When `N8N_WEBHOOK_URL` is set, new leads trigger a `POST` with JSON:
 
 `event`, `leadId`, `contactEmail`, `fullName`, `phone`, `temperature`, `score`, `createdAt`.
 
-## 4. Local development
+## 4. Project images on `/projects` (simple feed)
+
+**Recommended:** set public env vars in Vercel (no Facebook token):
+
+- `NEXT_PUBLIC_PROJECT_GALLERY_JSON` — JSON array: `[{"src":"https://.../photo.jpg","title":"Project 5"}]`
+- or `NEXT_PUBLIC_PROJECT_IMAGE_URLS` — comma-separated `https://...` URLs
+
+Optional: Facebook Graph API (`FACEBOOK_PAGE_ACCESS_TOKEN`, etc.) is only needed if you use the legacy Facebook album integration in code.
+
+## 5. Local development
 
 ```bash
 cd georgeo-solar
@@ -56,3 +65,4 @@ npm run dev
 ```
 
 Open `http://localhost:3000`.
+See `/.env.example` for Facebook variables used by `/projects`.
