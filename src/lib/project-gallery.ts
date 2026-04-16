@@ -61,7 +61,7 @@ function defaultDemoGallery(): GalleryItem[] {
     {
       src: "https://images.unsplash.com/photo-1613665813444-6a85c8876f5f?w=1200&q=80",
       title: "Commercial array",
-      caption: "Duck4 Solar — Georgeo_Solar",
+      caption: "GeorGeo Duck4 Solar",
     },
     {
       src: "https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=1200&q=80",

@@ -12,9 +12,12 @@ export function MarketingFooter() {
       <div className="mx-auto max-w-[1200px] px-6 py-16 sm:px-10">
         <div className="flex flex-col gap-10 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <p className="text-[15px] font-medium tracking-wide text-white">Georgeo_Solar</p>
-            <p className="mt-2 max-w-xs text-[13px] leading-relaxed text-[#737373]">
-              Duck4 Solar — placeholder baseline. Replace copy and assets in components.
+            <p className="text-[15px] font-medium tracking-wide text-white">
+              GeorGeo Duck4 Solar
+            </p>
+            <p className="mt-2 max-w-sm text-[13px] leading-relaxed text-[#737373]">
+              No.1 premium solar roof — we stand by you with a professional team, premium quality,
+              and proactive service.
             </p>
           </div>
           <nav className="flex flex-wrap gap-x-10 gap-y-3">
@@ -30,7 +33,7 @@ export function MarketingFooter() {
           </nav>
         </div>
         <p className="mt-14 text-center text-[11px] text-[#5c5c5c] sm:text-left">
-          © {new Date().getFullYear()} Duck4 Solar · Georgeo_Solar
+          © {new Date().getFullYear()} GeorGeo Duck4 Solar
         </p>
       </div>
     </footer>

@@ -14,7 +14,7 @@ export function MarketingHeader() {
           href="/"
           className="text-[15px] font-medium tracking-[0.02em] text-white hover:text-white/80"
         >
-          Georgeo_Solar
+          GeorGeo Duck4 Solar
         </Link>
         <nav className="flex items-center gap-6 sm:gap-10">
           {nav.map((item) => (

@@ -1,12 +1,11 @@
 /**
  * Marketing layout baseline inspired by premium solar product pages (e.g. tesla.com/solarroof).
- * Not affiliated with Tesla — replace all imagery, headlines, and copy for Duck4 Solar / Georgeo_Solar.
+ * Marketing landing — GeorGeo Duck4 Solar.
  */
 import Image from "next/image";
+import { HeroYoutubeBackground } from "@/components/marketing/hero-youtube-background";
 import { TeslaButton } from "@/components/marketing/tesla-button";
 
-const IMG_HERO =
-  "https://images.unsplash.com/photo-1508514177221-188b1f16e752?auto=format&fit=crop&w=2400&q=80";
 const IMG_SPLIT_A =
   "https://images.unsplash.com/photo-1613665813444-6a85c8876f5f?auto=format&fit=crop&w=1600&q=80";
 const IMG_SPLIT_B =
@@ -19,24 +18,14 @@ export function SolarLanding() {
     <>
       {/* Hero — full viewport, Tesla-style */}
       <section className="relative min-h-[100dvh] w-full">
-        <div className="absolute inset-0">
-          <Image
-            src={IMG_HERO}
-            alt=""
-            fill
-            priority
-            className="object-cover object-center"
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black" />
-        </div>
-        <div className="relative flex min-h-[100dvh] flex-col items-center justify-between px-4 pt-28 pb-16 text-center sm:pt-32">
+        <HeroYoutubeBackground />
+        <div className="relative z-10 flex min-h-[100dvh] flex-col items-center justify-between px-4 pt-28 pb-16 text-center sm:pt-32">
           <div className="max-w-4xl pt-8 sm:pt-16">
-            <h1 className="text-[40px] font-medium leading-[1.05] tracking-[-0.02em] text-white sm:text-[56px] md:text-[64px]">
-              Solar Roof
+            <h1 className="text-[40px] font-medium leading-[1.05] tracking-[-0.02em] text-white sm:text-[52px] md:text-[60px]">
+              No.1 Premium Solar Roof
             </h1>
-            <p className="mt-3 text-[17px] font-normal text-white/95 sm:text-[20px]">
-              Transform your roof. Power your home.
+            <p className="mx-auto mt-5 max-w-[34rem] text-[17px] font-normal leading-relaxed text-white/90 sm:text-[20px]">
+              We stand by you — a professional team with premium quality and proactive service.
             </p>
           </div>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6">

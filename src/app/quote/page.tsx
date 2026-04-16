@@ -5,7 +5,8 @@ import { MarketingHeader } from "@/components/marketing/marketing-header";
 
 export const metadata: Metadata = {
   title: "Order",
-  description: "Submit your bill, roof photos, and site details for a Duck4 Solar quote.",
+  description:
+    "Submit your bill, roof photos, and site details for a GeorGeo Duck4 Solar quote.",
 };
 
 export default function QuotePage() {

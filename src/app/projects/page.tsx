@@ -7,7 +7,8 @@ import { getStaticProjectGallery } from "@/lib/project-gallery";
 
 export const metadata: Metadata = {
   title: "Projects",
-  description: "Duck4 Solar — installation gallery. Images from your Vercel image feed.",
+  description:
+    "GeorGeo Duck4 Solar — installation gallery. Images from your configured project image feed.",
 };
 
 const FB_PAGE = "https://www.facebook.com/profile.php?id=100064946531847";

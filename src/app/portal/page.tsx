@@ -25,7 +25,7 @@ export default async function PortalPage() {
         <h1 className="text-2xl font-semibold">No request yet</h1>
         <p className="text-slate-400">
           We couldn&apos;t find a lead for your email. Submit a quote with the same email you used
-          to sign in, or contact Duck4 Solar.
+          to sign in, or contact GeorGeo Duck4 Solar.
         </p>
         <Link href="/quote" className="text-emerald-400 hover:underline">
           Get a solar quote
@@ -85,7 +85,7 @@ export default async function PortalPage() {
       ) : null}
 
       <p className="text-sm text-slate-500">
-        Questions? Reply to your confirmation email or message Duck4 Solar on LINE.
+        Questions? Reply to your confirmation email or message GeorGeo Duck4 Solar on LINE.
       </p>
     </div>
   );

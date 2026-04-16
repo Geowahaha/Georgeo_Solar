@@ -96,7 +96,7 @@ export function LeadQuoteForm() {
       <CardHeader>
         <CardTitle className="text-[28px] font-medium tracking-tight text-white">Order</CardTitle>
         <CardDescription className="text-[15px] leading-relaxed text-[#a2a3a5]">
-          Duck4 Solar — upload your bill & roof photos for a fast, accurate assessment.
+          GeorGeo Duck4 Solar — upload your bill & roof photos for a fast, accurate assessment.
         </CardDescription>
       </CardHeader>
       <CardContent>

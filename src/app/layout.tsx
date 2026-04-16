@@ -18,14 +18,15 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
   ),
   title: {
-    default: "Georgeo_Solar | Duck4 Solar CRM",
-    template: "%s | Georgeo_Solar",
+    default: "GeorGeo Duck4 Solar | No.1 Premium Solar Roof",
+    template: "%s | GeorGeo Duck4 Solar",
   },
   description:
-    "Duck4 Solar — premium solar installation in Thailand. Request a quote, track your project, and save on energy.",
+    "GeorGeo Duck4 Solar — No.1 premium solar roof in Thailand. Professional team, premium quality, proactive service. Request a quote and save on energy.",
   openGraph: {
-    title: "Georgeo_Solar | Duck4 Solar",
-    description: "Solar CRM and quotes for homes and factories.",
+    title: "GeorGeo Duck4 Solar | No.1 Premium Solar Roof",
+    description:
+      "We stand by you — professional team, premium quality, and proactive service.",
     type: "website",
   },
 };
