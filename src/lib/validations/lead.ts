@@ -23,6 +23,18 @@ export const leadFormSchema = z.object({
   propertyType: propertyTypeSchema,
   budgetRange: z.string().min(1, "Select a budget range"),
   notes: z.string().optional(),
-});
+})
+  .refine(
+    (d) =>
+      d.lat != null &&
+      d.lng != null &&
+      Number.isFinite(d.lat) &&
+      Number.isFinite(d.lng),
+    {
+      message:
+        "Set your exact location: use the map search, click the map, or enter latitude & longitude.",
+      path: ["lat"],
+    },
+  );
 
 export type LeadFormValues = z.infer<typeof leadFormSchema>;

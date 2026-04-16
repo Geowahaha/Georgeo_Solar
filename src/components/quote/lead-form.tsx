@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
+import { useActionState, useCallback, useEffect, useRef, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -68,6 +68,13 @@ export function LeadQuoteForm() {
       toast.error(state.message);
     }
   }, [state, form]);
+
+  const onPlaceResolved = useCallback(
+    (formattedAddress: string) => {
+      form.setValue("address", formattedAddress, { shouldValidate: true });
+    },
+    [form],
+  );
 
   const onSubmit = form.handleSubmit((values) => {
     const bill = billRef.current?.files?.[0];
@@ -162,16 +169,20 @@ export function LeadQuoteForm() {
           </div>
 
           <div className="space-y-2">
-            <Label>Map location</Label>
+            <Label>Map location *</Label>
             <LocationPicker
               lat={form.watch("lat") ?? null}
               lng={form.watch("lng") ?? null}
               inputClassName={fieldClass}
+              onPlaceResolved={onPlaceResolved}
               onChange={(la, ln) => {
                 form.setValue("lat", la, { shouldValidate: true });
                 form.setValue("lng", ln, { shouldValidate: true });
               }}
             />
+            {form.formState.errors.lat?.message && (
+              <p className="text-sm text-red-400">{form.formState.errors.lat.message}</p>
+            )}
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">

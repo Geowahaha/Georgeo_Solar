@@ -13,7 +13,12 @@ const IMG_SPLIT_B =
 const IMG_FULLBLEED =
   "https://images.unsplash.com/photo-1613665813444-6a85c8876f5f?auto=format&fit=crop&w=2400&q=80";
 
-export function SolarLanding() {
+type SolarLandingProps = {
+  /** Total quote requests stored in Supabase (leads table). */
+  customerCount?: number;
+};
+
+export function SolarLanding({ customerCount = 0 }: SolarLandingProps) {
   return (
     <>
       {/* Hero — full viewport, Tesla-style */}
@@ -26,6 +31,19 @@ export function SolarLanding() {
             </h1>
             <p className="mx-auto mt-5 max-w-[34rem] text-[17px] font-normal leading-relaxed text-white/90 sm:text-[20px]">
               We stand by you — a professional team with premium quality and proactive service.
+            </p>
+            <p className="mt-5 text-[14px] font-medium tracking-wide text-white/70 sm:text-[15px]">
+              {customerCount > 0 ? (
+                <>
+                  Trusted by{" "}
+                  <span className="text-white tabular-nums">
+                    {customerCount.toLocaleString()}
+                  </span>
+                  + customer{customerCount === 1 ? "" : "s"} — quotes saved securely in our system
+                </>
+              ) : (
+                <>Request a quote — your details are saved securely when you submit.</>
+              )}
             </p>
           </div>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6">

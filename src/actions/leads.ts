@@ -30,6 +30,19 @@ export async function createLeadAction(
   _prev: CreateLeadState | null,
   formData: FormData,
 ): Promise<CreateLeadState> {
+  try {
+    return await createLeadActionInner(formData);
+  } catch (err) {
+    console.error("createLeadAction failed:", err);
+    return {
+      ok: false,
+      message:
+        "Something went wrong while submitting. Check your connection and file sizes, then try again.",
+    };
+  }
+}
+
+async function createLeadActionInner(formData: FormData): Promise<CreateLeadState> {
   const facebookProfile = (formData.get("facebookProfile") as string) || "";
 
   const parsed = leadFormSchema.safeParse({
@@ -116,6 +129,7 @@ export async function createLeadAction(
     .single();
 
   if (leadErr || !leadRow) {
+    console.error("leads insert error:", leadErr?.message ?? leadErr);
     return { ok: false, message: "Could not save your request. Please try again." };
   }
 
@@ -188,5 +202,6 @@ export async function createLeadAction(
   });
 
   revalidatePath("/dashboard");
+  revalidatePath("/");
   return { ok: true, leadId };
 }
